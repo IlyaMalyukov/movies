@@ -1,4 +1,4 @@
-import axios from '@plugins/axios'
+import axios from '@/plugins/axios'
 
 const moviesStore = {
   namespaced: true,
@@ -6,7 +6,7 @@ const moviesStore = {
   getters: {},
   mutations: {},
   actions: {
-    async fetchMovies(context) {
+    async fetchMovies() {
       const response = await axios.get('/', {
         params: {
           i:'tt0111161'
