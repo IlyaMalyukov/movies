@@ -1,22 +1,20 @@
 <template>
   <div id="app">
-    <b-button>Button</b-button>
-    <b-button variant="danger">Button</b-button>
-    <b-button variant="success">Button</b-button>
-    <b-button variant="outline-primary">Button</b-button>
+    <MoviesList :list='moviesList'/>
   </div>
 </template>
 
 <script>
-import {mapActions} from 'vuex'
+import MoviesList from '@/components/MoviesList'
+import {mapGetters} from 'vuex'
 
 export default {
   name: 'App',
-  mounted() {
-    this.fetchMovies()
+  components: {
+    MoviesList
   },
-  methods: {
-    ...mapActions('movies', ['fetchMovies'])
+  computed: {
+    ...mapGetters('movies', ['moviesList'])
   }
 }
 </script>
