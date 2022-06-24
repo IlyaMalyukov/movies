@@ -1,17 +1,30 @@
 <template>
   <div id="app">
-    <MoviesList :list='moviesList'/>
+    <PosterBg :poster='posterBg'/>
+    <MoviesList 
+    :list='moviesList'
+    @changePoster='onChangePoster'/>
   </div>
 </template>
 
 <script>
 import MoviesList from '@/components/MoviesList'
+import PosterBg from '@/components/PosterBg'
 import {mapGetters} from 'vuex'
 
 export default {
   name: 'App',
   components: {
-    MoviesList
+    MoviesList,
+    PosterBg
+  },
+  data: () => ({
+    posterBg: ''
+  }),
+  methods: {
+    onChangePoster(poster) {
+      this.posterBg = poster
+    }
   },
   computed: {
     ...mapGetters('movies', ['moviesList'])
@@ -21,11 +34,12 @@ export default {
 
 <style>
 #app {
+  position: relative;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  padding-top: 60px;
 }
 </style>

@@ -2,22 +2,23 @@
   <div class="movie-item mb-3">
     <div class="movie-item__poster" :style='posterBg'></div>
     <div class="info">
-      <div class="info-text">
-        <h3 class="info-text__title">
+      <div class="description">
+        <h3 class="description__title">
           {{movie.Title}}
         </h3>
-        <span class="info-text__year">
+        <span class="description__year">
           {{movie.Year}}
         </span>
       </div>
-      <div class="controls row no-gutters">
+      <p class="info__action">Read more</p>
+      <!-- <div class="controls row no-gutters">
         <div class="col pr-2">
           <BButton size="md" block variant="outline-light">Edit</BButton>
         </div>
         <div class="col pl-2">
           <BButton size="md" block variant="outline-light">Remove</BButton>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -69,13 +70,13 @@ export default {
 
 .info {
   padding: 20px 10px;
-  display: flex;
-  flex-direction: column;
   height: 100%;
-  justify-content: space-between;
   opacity: 0;
   transition: all .2 ease;
   color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .movie-item:hover .info {
@@ -83,15 +84,20 @@ export default {
   background-color: rgba(0, 0, 0, .7);
 }
 
-.info-text {
+.info__action {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.description {
   text-align: left;
 }
 
-.info-text__title {
+.description__title {
   font-size: 20px;
 }
 
-.info-text__year {
+.description__year {
   font-size: 14px;
 }
 </style>
