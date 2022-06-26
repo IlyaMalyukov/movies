@@ -10,8 +10,8 @@
         </BCol>
       </template>
       <template v-else>
-        <div>
-          Empty list
+        <div class='no-data'>
+          No data
         </div>
       </template>
     </BRow>
@@ -50,5 +50,15 @@ export default {
   font-size: 50px;
   margin-bottom: 30px;
   color: #fff;
+}
+
+.no-data {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 36px;
 }
 </style>
