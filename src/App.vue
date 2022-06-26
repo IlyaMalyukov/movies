@@ -1,10 +1,12 @@
 <template>
   <div id="app">
+    <PreLoader/> 
     <PosterBg :poster='posterBg'/>
     <MoviesList 
     :list='moviesList'
     @changePoster='onChangePoster'/>
     <MoviesPagination
+      v-if='Object.keys(moviesList).length'
       :current-page='currentPage'
       :per-page='moviesPerPage'
       :total='moviesLength'
@@ -17,6 +19,7 @@
 import MoviesList from '@/components/MoviesList'
 import PosterBg from '@/components/PosterBg'
 import MoviesPagination from '@/components/MoviesPagination'
+import PreLoader from '@/components/PreLoader'
 import {mapActions, mapGetters} from 'vuex'
 
 export default {
@@ -25,6 +28,7 @@ export default {
     MoviesList,
     PosterBg,
     MoviesPagination,
+    PreLoader
   },
   data: () => ({
     posterBg: ''
@@ -61,6 +65,8 @@ export default {
 
 <style>
 #app {
+  min-width: 100vw;
+  min-height: 100vh;
   position: relative;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -68,5 +74,8 @@ export default {
   text-align: center;
   color: #2c3e50;
   padding-top: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 </style>
