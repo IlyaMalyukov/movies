@@ -1,7 +1,7 @@
 <template>
   <div class="movie-item mb-3">
     <div class="movie-item__poster" :style='posterBg'></div>
-    <div class="info">
+    <div class="info" @click.prevent='emitInfoEvent'>
       <div class="description">
         <h3 class="description__title">
           {{movie.Title}}
@@ -11,14 +11,6 @@
         </span>
       </div>
       <p class="info__action">Read more</p>
-      <!-- <div class="controls row no-gutters">
-        <div class="col pr-2">
-          <BButton size="md" block variant="outline-light">Edit</BButton>
-        </div>
-        <div class="col pl-2">
-          <BButton size="md" block variant="outline-light">Remove</BButton>
-        </div>
-      </div> -->
     </div>
   </div>
 </template>
@@ -30,6 +22,11 @@ export default {
     movie: {
       type: Object,
       required: true
+    }
+  },
+  methods: {
+    emitInfoEvent() {
+      this.$emit('showModal', this.movie.imdbID)
     }
   },
   computed: {
