@@ -1,5 +1,5 @@
 <template>
-  <div class='notification'></div>
+  <div></div>
 </template>
 
 <script>
@@ -24,9 +24,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.notification >>> .b-toaster {
-  top: 56px !important;
-}
-</style>
