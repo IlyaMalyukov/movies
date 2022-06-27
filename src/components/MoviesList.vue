@@ -6,7 +6,8 @@
         <BCol cols='3' v-for='(movie, key) in list' :key='key'>
           <MovieItem 
           :movie='movie'
-          @mouseover.native="onMouseOver(movie.Poster)"/>
+          @mouseover.native="onMouseOver(movie.Poster)"
+          @showModal='showMovieInfo'/>
         </BCol>
       </template>
       <template v-else>
@@ -15,17 +16,28 @@
         </div>
       </template>
     </BRow>
+    <BModal 
+      :id='movieInfoModalId'
+      size='xl'
+      hide-footer
+      hide-header>
+      <MovieInfoModalContent
+        :movie='selectedMovie'
+        @closeModal='closeModal'/>
+    </BModal>
   </BContainer>
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
-import MovieItem from './MovieItem.vue'
+import MovieItem from './MovieItem'
+import MovieInfoModalContent from './MovieInfoModalContent'
 
 export default {
   name: 'MoviesList',
   components: {
-    MovieItem
+    MovieItem,
+    MovieInfoModalContent
   },
   props: {
     list: {
@@ -33,9 +45,21 @@ export default {
       default: () => ({})
     }
   },
+  data: () => ({
+    movieInfoModalId: 'movie-info',
+    selectedMovieId: ''
+  }),
   methods: {
     onMouseOver(poster) {
       this.$emit('changePoster', poster)
+    },
+    showMovieInfo(id) {
+      this.selectedMovieId = id
+      this.$bvModal.show(this.movieInfoModalId)
+    },
+    closeModal() {
+      this.selectedMovieID = null;
+      this.$bvModal.hide(this.movieInfoModalId);
     }
   },
   computed: {
@@ -48,6 +72,9 @@ export default {
     },
     listTitle() {
       return this.isSearch ? 'Search result:' : 'IMDB Top 250'
+    },
+    selectedMovie() {
+      return this.selectedMovieId ? this.list[this.selectedMovieId] : null
     }
   },
 }
