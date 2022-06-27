@@ -38,8 +38,8 @@ export default {
         this.searchMovies(val)
         this.toggleSearchState(true)
       } else {
-        this.toggleSearchState(false)
         this.fetchMovies()
+        this.toggleSearchState(false)
       }
       
     }

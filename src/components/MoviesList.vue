@@ -39,14 +39,17 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('movies', ['isSearch']),
+    ...mapGetters('movies', [
+      'isSearch',
+      'isNoDataSearch'
+      ]),
     isExist() {
-      return Boolean(Object.keys(this.list).length)
+      return Boolean(Object.keys(this.list).length) && !this.isNoDataSearch
     },
     listTitle() {
       return this.isSearch ? 'Search result:' : 'IMDB Top 250'
     }
-  }
+  },
 }
 </script>
 

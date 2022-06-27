@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <PreLoader/> 
+    <PreLoader/>
+    <Notification/>
     <PosterBg :poster='posterBg'/>
     <Header/>
     <MoviesList 
@@ -22,6 +23,7 @@ import PosterBg from '@/components/PosterBg'
 import MoviesPagination from '@/components/MoviesPagination'
 import PreLoader from '@/components/PreLoader'
 import Header from '@/components/Header'
+import Notification from '@/components/Notification'
 import {mapActions, mapGetters} from 'vuex'
 
 export default {
@@ -31,7 +33,8 @@ export default {
     PosterBg,
     MoviesPagination,
     PreLoader,
-    Header
+    Header,
+    Notification
   },
   data: () => ({
     posterBg: ''
@@ -83,8 +86,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
 }
 </style>

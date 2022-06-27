@@ -12,7 +12,8 @@ function serializeResponse(movies) {
 const {
   MOVIES,
   CURRENT_PAGE,
-  TOGGLE_SEARCH
+  TOGGLE_SEARCH,
+  TOGGLE_SEARCH_NO_DATA
 } = mutations
 
 const moviesStore = {
@@ -22,7 +23,8 @@ const moviesStore = {
     moviesPerPage: 12,
     currentPage: 1,
     movies: {},
-    isSearch: false
+    isSearch: false,
+    isNoDataSearch: false,
   },
   getters: {
     moviesList: ({movies}) => movies,
@@ -30,7 +32,8 @@ const moviesStore = {
     currentPage: ({currentPage}) => currentPage,
     moviesPerPage: ({moviesPerPage}) => moviesPerPage,
     moviesLength: ({top250IDs}) => Object.keys(top250IDs).length,
-    isSearch: ({isSearch}) => isSearch
+    isSearch: ({isSearch}) => isSearch,
+    isNoDataSearch: ({isNoDataSearch}) => isNoDataSearch
   },
   mutations: {
     [MOVIES](state, value) {
@@ -41,6 +44,9 @@ const moviesStore = {
     },
     [TOGGLE_SEARCH](state, bool) {
       state.isSearch = bool
+    },
+    [TOGGLE_SEARCH_NO_DATA](state, bool) {
+      state.isNoDataSearch = bool
     }
   },
   actions: {
@@ -62,6 +68,7 @@ const moviesStore = {
         const response = await Promise.all(requests)
         const movies = serializeResponse(response)
         commit(MOVIES, movies)
+        dispatch('toggleSearchNoData', false)
       } catch(err) {
           console.log(err)
       } finally {
@@ -84,14 +91,24 @@ const moviesStore = {
 
         const movies = serializeResponse(response.Search)
         commit(MOVIES, movies)
+        dispatch('toggleSearchNoData', false)
       } catch(err) {
-        console.log(err)
+        console.log(err.message)
+        dispatch('toggleSearchNoData', true)
+        dispatch('showNotify', {
+          msg: err.message,
+          title: 'Error',
+          variant: 'danger'
+        }, {root: true})
       } finally {
         dispatch('toggleLoader', false, {root: true})
       }
     },
     toggleSearchState({commit}, bool) {
       commit(TOGGLE_SEARCH, bool)
+    },
+    toggleSearchNoData({commit}, bool) {
+      commit(TOGGLE_SEARCH_NO_DATA, bool)
     }
   }
 }
