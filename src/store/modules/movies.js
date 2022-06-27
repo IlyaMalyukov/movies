@@ -11,7 +11,9 @@ function serializeResponse(movies) {
 
 const {
   MOVIES,
-  CURRENT_PAGE
+  CURRENT_PAGE,
+  TOGGLE_SEARCH,
+  TOGGLE_SEARCH_NO_DATA
 } = mutations
 
 const moviesStore = {
@@ -20,14 +22,18 @@ const moviesStore = {
     top250IDs: IDs,
     moviesPerPage: 12,
     currentPage: 1,
-    movies: {}
+    movies: {},
+    isSearch: false,
+    isNoDataSearch: false,
   },
   getters: {
     moviesList: ({movies}) => movies,
     slicedIDs: ({top250IDs}) => (from, to) => top250IDs.slice(from, to),
     currentPage: ({currentPage}) => currentPage,
     moviesPerPage: ({moviesPerPage}) => moviesPerPage,
-    moviesLength: ({top250IDs}) => Object.keys(top250IDs).length
+    moviesLength: ({top250IDs}) => Object.keys(top250IDs).length,
+    isSearch: ({isSearch}) => isSearch,
+    isNoDataSearch: ({isNoDataSearch}) => isNoDataSearch
   },
   mutations: {
     [MOVIES](state, value) {
@@ -35,6 +41,12 @@ const moviesStore = {
     },
     [CURRENT_PAGE](state, value) {
       state.currentPage = value
+    },
+    [TOGGLE_SEARCH](state, bool) {
+      state.isSearch = bool
+    },
+    [TOGGLE_SEARCH_NO_DATA](state, bool) {
+      state.isNoDataSearch = bool
     }
   },
   actions: {
@@ -56,6 +68,7 @@ const moviesStore = {
         const response = await Promise.all(requests)
         const movies = serializeResponse(response)
         commit(MOVIES, movies)
+        dispatch('toggleSearchNoData', false)
       } catch(err) {
           console.log(err)
       } finally {
@@ -65,6 +78,37 @@ const moviesStore = {
     changeCurrentPage({commit, dispatch}, page) {
       commit(CURRENT_PAGE, page)
       dispatch('fetchMovies')
+    },
+    async searchMovies({commit, dispatch}, query) {
+      try {
+        dispatch('toggleLoader', true, {root: true})
+
+        const response = await axios.get(`/?s=${query}`)
+
+        if (response.Error) {
+          throw Error(response.Error)
+        }
+
+        const movies = serializeResponse(response.Search)
+        commit(MOVIES, movies)
+        dispatch('toggleSearchNoData', false)
+      } catch(err) {
+        console.log(err.message)
+        dispatch('toggleSearchNoData', true)
+        dispatch('showNotify', {
+          msg: err.message,
+          title: 'Error',
+          variant: 'danger'
+        }, {root: true})
+      } finally {
+        dispatch('toggleLoader', false, {root: true})
+      }
+    },
+    toggleSearchState({commit}, bool) {
+      commit(TOGGLE_SEARCH, bool)
+    },
+    toggleSearchNoData({commit}, bool) {
+      commit(TOGGLE_SEARCH_NO_DATA, bool)
     }
   }
 }
