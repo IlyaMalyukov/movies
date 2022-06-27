@@ -2,11 +2,12 @@
   <div id="app">
     <PreLoader/> 
     <PosterBg :poster='posterBg'/>
+    <Header/>
     <MoviesList 
     :list='moviesList'
     @changePoster='onChangePoster'/>
     <MoviesPagination
-      v-if='Object.keys(moviesList).length'
+      v-if='paginationVisible'
       :current-page='currentPage'
       :per-page='moviesPerPage'
       :total='moviesLength'
@@ -20,6 +21,7 @@ import MoviesList from '@/components/MoviesList'
 import PosterBg from '@/components/PosterBg'
 import MoviesPagination from '@/components/MoviesPagination'
 import PreLoader from '@/components/PreLoader'
+import Header from '@/components/Header'
 import {mapActions, mapGetters} from 'vuex'
 
 export default {
@@ -28,7 +30,8 @@ export default {
     MoviesList,
     PosterBg,
     MoviesPagination,
-    PreLoader
+    PreLoader,
+    Header
   },
   data: () => ({
     posterBg: ''
@@ -50,8 +53,16 @@ export default {
       'moviesList', 
       'currentPage', 
       'moviesPerPage',
-      'moviesLength'
-    ])
+      'moviesLength',
+      'isSearch'
+    ]),
+    paginationVisible() {
+      if (Object.keys(this.moviesList).length && !this.isSearch) {
+        return true
+      }
+
+      return false
+    }
   },
   watch: {
     '$route.query': {
@@ -65,7 +76,6 @@ export default {
 
 <style>
 #app {
-  min-width: 100vw;
   min-height: 100vh;
   position: relative;
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -73,7 +83,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  padding-top: 60px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
